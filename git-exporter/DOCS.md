@@ -29,19 +29,11 @@ dry_run: false
 
 ### `repository.url`
 
-Any https url to your git repository. (For now _no_ SSH)
-
-### `repository.email` (Optional)
-
-The email address the commits author is using.
+Any url to your git repository. (For now _only_ SSH)
 
 ### `repository.username`
 
 Your username for https authentication.
-
-### `repository.password`
-
-Your password or __access token__ for your repository.
 
 ### `repository.pull_before_push`
 
