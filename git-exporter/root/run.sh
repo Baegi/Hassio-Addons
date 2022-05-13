@@ -9,14 +9,8 @@ pull_before_push="$(bashio::config 'repository.pull_before_push')"
 
 function setup_git {
     repository=$(bashio::config 'repository.url')
-    username=$(bashio::config 'repository.username')
-    password=$(bashio::config 'repository.password')
-    commiter_mail=$(bashio::config 'repository.email')
+    deploy_key=$(bashio::config 'repository.deploy_key')
     branch=$(bashio::config 'repository.branch_name')
-
-    if [[ "$password" != "ghp_*" ]]; then
-        password=$(python3 -c "import urllib.parse; print(urllib.parse.quote('${password}'))")
-    fi
 
     if [ ! -d $local_repository ]; then
         bashio::log.info 'Create local repository'
@@ -24,8 +18,11 @@ function setup_git {
     fi
     cd $local_repository
 
+    bashio::log.info 'Storing deploy key'
+    echo ${deploy_key} > ~/.ssh/id_rsa
+
     if [ ! -d .git ]; then
-        fullurl="https://${username}:${password}@${repository##*https://}"
+        fullurl=${repository}
         if [ "$pull_before_push" == 'true' ]; then
             bashio::log.info 'Clone existing repository'
             git clone "$fullurl" $local_repository
