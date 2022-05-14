@@ -23,7 +23,7 @@ function setup_git {
     bashio::log.info 'Storing deploy key'
     mkdir ~/.ssh/
     echo ${deploy_key} > ~/.ssh/id_rsa
-    chmmod 0600 ~/.ssh/id_rsa
+    chmod 0600 ~/.ssh/id_rsa
 
     bashio::log.info "Auto host key detection: ${auto_host_key_detection}"
     if [ ${auto_host_key_detection} = true ]; then
