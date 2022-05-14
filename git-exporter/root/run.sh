@@ -25,8 +25,8 @@ function setup_git {
     echo ${deploy_key} > ~/.ssh/id_rsa
 
     bashio::log.info "Auto host key detection: ${auto_host_key_detection}"
-    if [ ${auto_host_key_detection} ]; then
-        remote_host=echo ${repository} | sed -e 's/.*@\(.*\):.*/\1/'
+    if [ ${auto_host_key_detection} = true ]; then
+        remote_host=$(echo ${repository} | sed -e 's/.*@\(.*\):.*/\1/')
         bashio::log.info "Detecting Keys of host ${remote_host}"
         ssh-keyscan ${remote_host} > ~/.ssh/known_hosts
     else
@@ -34,7 +34,7 @@ function setup_git {
         echo ${known_hosts_entry} > ~/.ssh/known_hosts
     fi
     bashio::log.info "known_hosts content:\n$(cat ~/.ssh/known_hosts)"
-    
+
 
     if [ ! -d .git ]; then
         fullurl=${repository}
