@@ -22,9 +22,8 @@ function setup_git {
 
     bashio::log.info 'Storing deploy key'
     mkdir ~/.ssh/
-    echo ${deploy_key} > ~/.ssh/id_rsa
+    echo "${deploy_key}" > ~/.ssh/id_rsa
     chmod 0600 ~/.ssh/id_rsa
-    bashio::log.info "Priv Key:\n$(cat ~/.ssh/id_rsa)"
 
     bashio::log.info "Auto host key detection: ${auto_host_key_detection}"
     if [ ${auto_host_key_detection} = true ]; then
@@ -35,7 +34,6 @@ function setup_git {
         bashio::log.info 'Storing known_hosts entry'
         echo ${known_hosts_entry} > ~/.ssh/known_hosts
     fi
-    bashio::log.info "known_hosts content:\n$(cat ~/.ssh/known_hosts)"
 
 
     if [ ! -d .git ]; then
@@ -49,7 +47,7 @@ function setup_git {
             git init $local_repository
             git remote add origin "$fullurl"
         fi
-        git config user.name "${username}"
+        #git config user.name "${username}"
     fi
 
     #Reset secrets if existing
@@ -125,7 +123,7 @@ function export_lovelace {
     [ ! -d "${local_repository}/lovelace" ] && mkdir "${local_repository}/lovelace"
     mkdir -p '/tmp/lovelace'
     find /config/.storage -name "lovelace*" -printf '%f\n' | xargs -I % cp /config/.storage/% /tmp/lovelace/%.json
-    /utils/jsonToYaml.py '/tmp/lovelace/' 'data'
+    /utils/jsonToYaml.py '/tmp/lovelace/'
     rsync -archive --compress --delete --checksum --prune-empty-dirs -q --include='*.yaml' --exclude='*' /tmp/lovelace/ "${local_repository}/lovelace"
     chmod 644 -R "${local_repository}/lovelace"
 }
