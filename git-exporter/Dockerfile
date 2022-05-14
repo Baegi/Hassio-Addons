@@ -11,7 +11,7 @@ RUN git config --global advice.detachedHead false && \
 
 FROM $BUILD_FROM AS RUNNING
 
-RUN apk add --no-cache git rsync grep sed python3 py3-pip findutils && pip3 install --no-cache-dir PyYAML==6.0 dotty-dict==1.3.0
+RUN apk add --no-cache openssh-client git rsync grep sed python3 py3-pip findutils && pip3 install --no-cache-dir PyYAML==6.0 dotty-dict==1.3.0
 
 COPY --from=BUILD /usr/local/bin/git-secrets /usr/local/bin/git-secrets
 
