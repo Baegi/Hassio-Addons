@@ -10,6 +10,8 @@ pull_before_push="$(bashio::config 'repository.pull_before_push')"
 function setup_git {
     repository=$(bashio::config 'repository.url')
     deploy_key=$(bashio::config 'repository.deploy_key')
+    known_hosts_entry=$(bashio::config 'repository.known_hosts_entry')
+    auto_host_key_detection=$(bashio::config 'repository.auto_host_key_detection')
     branch=$(bashio::config 'repository.branch_name')
 
     if [ ! -d $local_repository ]; then
@@ -21,6 +23,18 @@ function setup_git {
     bashio::log.info 'Storing deploy key'
     mkdir ~/.ssh/
     echo ${deploy_key} > ~/.ssh/id_rsa
+
+    bashio::log.info "Auto host key detection: ${auto_host_key_detection}"
+    if [ ${auto_host_key_detection} ]; then
+        remote_host=echo ${repository} | sed -e 's/.*@\(.*\):.*/\1/'
+        bashio::log.info "Detecting Keys of host ${remote_host}"
+        ssh-keyscan ${remote_host} > ~/.ssh/known_hosts
+    else
+        bashio::log.info 'Storing known_hosts entry'
+        echo ${known_hosts_entry} > ~/.ssh/known_hosts
+    fi
+    bashio::log.info "known_hosts content:\n$(cat ~/.ssh/known_hosts)"
+    
 
     if [ ! -d .git ]; then
         fullurl=${repository}
@@ -34,7 +48,6 @@ function setup_git {
             git remote add origin "$fullurl"
         fi
         git config user.name "${username}"
-        git config user.email "${commiter_mail:-git.exporter@home-assistant}"
     fi
 
     #Reset secrets if existing
