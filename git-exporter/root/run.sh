@@ -19,6 +19,7 @@ function setup_git {
     cd $local_repository
 
     bashio::log.info 'Storing deploy key'
+    mkdir ~/.ssh/
     echo ${deploy_key} > ~/.ssh/id_rsa
 
     if [ ! -d .git ]; then
