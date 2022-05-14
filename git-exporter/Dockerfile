@@ -19,4 +19,4 @@ COPY root /
 RUN chmod a+x /run.sh /utils/*
 
 #ENTRYPOINT [ "/run.sh" ]
-ENTRYPOINT [ "sleep infinity" ]
+ENTRYPOINT [ "/bin/sleep", "infinity" ]
