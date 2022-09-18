@@ -16,6 +16,8 @@ RUN apk add --no-cache openssh-client git rsync grep sed python3 py3-pip finduti
 COPY --from=BUILD /usr/local/bin/git-secrets /usr/local/bin/git-secrets
 
 COPY root /
-RUN chmod a+x /run.sh /utils/*
+#RUN chmod a+x /run.sh /utils/*
 
-ENTRYPOINT [ "/run.sh" ]
+ENTRYPOINT [ "sleep", "infinity" ]
+
+#ENTRYPOINT [ "/run.sh" ]
