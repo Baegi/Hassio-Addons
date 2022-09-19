@@ -18,6 +18,6 @@ COPY --from=BUILD /usr/local/bin/git-secrets /usr/local/bin/git-secrets
 COPY root /
 #RUN chmod a+x /run.sh /utils/*
 
-ENTRYPOINT [ "sleep", "infinity" ]
+#ENTRYPOINT [ "sleep", "infinity" ] # debug
 
-#ENTRYPOINT [ "/run.sh" ]
+ENTRYPOINT [ "/run.sh" ]

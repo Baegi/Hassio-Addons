@@ -139,18 +139,17 @@ function export_esphome {
 
 function export_addons {
     [ -d ${local_repository}/addons ] || mkdir -p ${local_repository}/addons
-    installed_addons=$(bashio::addons.installed)
+    installed_addons=$(bashio::addons false 'cache_miss')
     mkdir '/tmp/addons/'
     for addon in $installed_addons; do
-        if [ "$(bashio::addons.installed "${addon}")" == 'true' ]; then
-            bashio::log.info "Get ${addon} configs"
-            bashio::addon.options "$addon" >  /tmp/tmp.json
-            /utils/jsonToYaml.py /tmp/tmp.json
-            mv /tmp/tmp.yaml "/tmp/addons/${addon}.yaml"
-        fi
+        bashio::log.info "Get ${addon} configs"
+        bashio::addon.options "$addon" >  /tmp/tmp.json
+        /utils/jsonToYaml.py /tmp/tmp.json
+        mv /tmp/tmp.yaml "/tmp/addons/${addon}.yaml"
     done
     bashio::log.info "Get addon repositories"
-    bashio::addons false 'addons.repositorys' '.repositories | map(select(.source != null)) | map({(.name): {source,maintainer,slug}}) | add' > /tmp/tmp.json
+    bashio::api.supervisor GET "/store/repositories" false \
+         | jq '. | map(select(.source != null and .source != "core" and .source != "local")) | map({(.name): {source,maintainer,slug}}) | add' > /tmp/tmp.json'
     /utils/jsonToYaml.py /tmp/tmp.json
     mv /tmp/tmp.yaml "/tmp/addons/repositories.yaml"
     rsync -archive --compress --delete --checksum --prune-empty-dirs -q /tmp/addons/ ${local_repository}/addons
