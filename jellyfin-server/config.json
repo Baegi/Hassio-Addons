@@ -1,0 +1,13 @@
+
+{
+  "name": "Jellyfin Server",
+  "version": "0.1",
+  "slug": "jellyfin-server",
+  "description": "Jellyfin Server Official Image",
+  "url": "https://github.com/Baegi/Hassio-Addons/tree/master/jellyfin-server",
+  "arch": [
+    "armv7"
+  ],
+  "image": "jellyfin/jellyfin",
+  "map": ["config"]
+}
