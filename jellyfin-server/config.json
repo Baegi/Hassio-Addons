@@ -8,6 +8,6 @@
   "arch": [
     "armv7"
   ],
-  "image": "jellyfin/jellyfin",
+  "image": "jellyfin/jellyfin:stable",
   "map": ["config"]
 }
